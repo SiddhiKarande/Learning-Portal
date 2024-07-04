@@ -12,13 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const bcrypt_1 = require("bcrypt");
 const user_services_1 = __importDefault(require("../users/user.services"));
 const encrypt_1 = require("../utility/encrypt");
 const auth_responses_1 = require("./auth.responses");
+const jsonwebtoken_1 = require("jsonwebtoken");
 //signup service
 const signup = (userData) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const userExists = yield user_services_1.default.findOneUser(userData);
+        const userExists = yield user_services_1.default.findOneUser({ email: userData.email });
         if (userExists) {
             throw auth_responses_1.authReponses.USER_ALREADY_SIGNEDUP;
         }
@@ -29,6 +31,26 @@ const signup = (userData) => __awaiter(void 0, void 0, void 0, function* () {
         throw auth_responses_1.authReponses.USER_REGISTRATION_FAILED;
     }
 });
+const login = (userData) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = yield user_services_1.default.findOneUser({ email: userData.email });
+        if (!user) {
+            throw auth_responses_1.authReponses.WRONG_CREDENTIALS;
+        }
+        ;
+        const matchPassword = yield (0, bcrypt_1.compare)(userData.password, user.password);
+        if (!matchPassword) {
+            throw auth_responses_1.authReponses.PASSWORD_DOESNT_MATCH;
+        }
+        const accessToken = (0, jsonwebtoken_1.sign)({ email: user.email, role: user.role }, process.env.JWT_SECRET);
+        console.log({ accessToken, role: user.role });
+        return { accessToken, role: user.role };
+    }
+    catch (e) {
+        throw e;
+    }
+});
 exports.default = {
     signup,
+    login,
 };

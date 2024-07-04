@@ -1,5 +1,13 @@
 import { Router } from "express";
 
+import {MatchFunction} from "path-to-regexp"
+
+
+type ExcludedRoute = {
+    path:MatchFunction<{ [key: string]: string }>;
+    method:'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+}
+export type ExcludedRoutes = ExcludedRoute[];
 
 export class Route {
 	static registeredRoutes: Route[] = [];

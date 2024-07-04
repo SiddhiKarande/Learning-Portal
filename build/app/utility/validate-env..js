@@ -5,7 +5,7 @@ const zod_1 = require("zod");
 const dotenv_1 = require("dotenv");
 const envObject = zod_1.z.object({
     PORT: zod_1.z.coerce.number(),
-    // JWT_SECRET: z.string(),
+    JWT_SECRET: zod_1.z.string(),
     MONGO_URI: zod_1.z.string(),
     // GOOGLE_AUTH_CLIENT_ID: z.string(),
     // GOOGLE_AUTH_CLIENT_SECRET: z.string(),

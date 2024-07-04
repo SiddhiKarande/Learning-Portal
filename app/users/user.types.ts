@@ -2,8 +2,8 @@ import { z } from "zod";
 import { ZBase } from "../utility/base-schema";
 
 export const ZUser = ZBase.extend({
-    firstName: z.string().trim(),
-    lastNmae: z.string().trim(),
+    firstName: z.string().min(5,{message:"minimum 5 characters"}).trim(),
+    lastName: z.string().min(5,{message:"minimum 5 characters"}).trim(),
     email: z.string().email().trim(),
     password:z.string().min(5,{message:"minimum 5 characters"}).trim(),
     role:z.string()

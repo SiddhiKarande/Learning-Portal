@@ -16,11 +16,21 @@ const express_1 = require("express");
 const auth_services_1 = __importDefault(require("./auth.services"));
 const response_handler_1 = require("../utility/response-handler");
 const route_types_1 = require("../routes/route.types");
+const auth_validations_1 = require("./auth.validations");
 const router = (0, express_1.Router)();
-router.post("/signup", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/signup", ...auth_validations_1.signupValidation, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const signup = yield auth_services_1.default.signup(req.body);
         res.send(new response_handler_1.ResponseHandler(signup));
+    }
+    catch (e) {
+        next(e);
+    }
+}));
+router.post("/login", ...auth_validations_1.loginValidatin, (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const login = yield auth_services_1.default.login(req.body);
+        res.send(new response_handler_1.ResponseHandler(login));
     }
     catch (e) {
         next(e);
